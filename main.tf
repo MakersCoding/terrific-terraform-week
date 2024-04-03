@@ -33,7 +33,7 @@ resource "aws_elastic_beanstalk_application" "bish_bash_bosh_app" {
 }
 
 resource "aws_elastic_beanstalk_environment" "bish_bash_bosh_app_environment" {
-  name                = "bish-bash-bosh-task-listing-app-environment"
+  name                = "bi-ba-bo-task-list-app-env"
   application         = aws_elastic_beanstalk_application.bish_bash_bosh_app.name
   solution_stack_name = "64bit Amazon Linux 2023 v4.0.1 running Docker"
 

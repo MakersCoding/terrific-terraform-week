@@ -63,12 +63,13 @@ resource "aws_iam_role" "bish_bash_bosh_app_ec2_role" {
         Effect = "Allow"
       }
     ]
-    ManagedPolicyArns = [
+    
+  })
+  ManagedPolicyArns = [
       "arn:aws:iam::aws:policy/AWSElasticBeanstalkWebTier",
       "arn:aws:iam::aws:policy/AWSElasticBeanstalkMulticontainerDocker",
       "arn:aws:iam::aws:policy/AWSElasticBeanstalkWorkerTier"
     ]
-  })
 }
 
 resource "aws_iam_instance_profile" "bish_bash_bosh_app_ec2_instance_profile" {

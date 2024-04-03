@@ -18,7 +18,7 @@ provider "aws" {
 }
 
 resource "aws_ecr_repository" "my_repository" {
-  name = "Bish-bash-bosh-repo"
+  name = "bish-bash-bosh-repo"
   
   # Optional configurations
   image_tag_mutability = "IMMUTABLE"

@@ -12,6 +12,7 @@ terraform {
       version = "~> 4.16"
     }
   }
+  required_version = ">=1.2.0"
 }
 provider "aws" {
   region = "eu-west-2"
@@ -63,14 +64,21 @@ resource "aws_iam_role" "bish_bash_bosh_app_ec2_role" {
         Effect = "Allow"
       }
     ]
-    ManagedPolicyArns = [
-      "arn:aws:iam::aws:policy/AWSElasticBeanstalkWebTier",
-      "arn:aws:iam::aws:policy/AWSElasticBeanstalkMulticontainerDocker",
-      "arn:aws:iam::aws:policy/AWSElasticBeanstalkWorkerTier"
-    ]
+
   })
 }
-
+resource "aws_iam_role_policy_attachment" "web_tier" {
+  role       = aws_iam_role.bish_bash_bosh_app_ec2_role.name
+  policy_arn = "arn:aws:iam::aws:policy/AWSElasticBeanstalkWebTier"
+}
+resource "aws_iam_role_policy_attachment" "multi_container_docker" {
+  role       = aws_iam_role.bish_bash_bosh_app_ec2_role.name
+  policy_arn = "arn:aws:iam::aws:policy/AWSElasticBeanstalkMulticontainerDocker"
+}
+resource "aws_iam_role_policy_attachment" "worker_tier" {
+  role       = aws_iam_role.bish_bash_bosh_app_ec2_role.name
+  policy_arn = "arn:aws:iam::aws:policy/AWSElasticBeanstalkWorkerTier"
+}
 resource "aws_iam_instance_profile" "bish_bash_bosh_app_ec2_instance_profile" {
   name = "bish-bash-bosh-task-listing-app-ec2-instance-profile"
   role = aws_iam_role.bish_bash_bosh_app_ec2_role.name

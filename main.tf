@@ -67,6 +67,11 @@ resource "aws_iam_role" "bish_bash_bosh_app_ec2_role" {
 
   })
 }
+resource "aws_s3_bucket" "docker_deploy_bucket" {
+  bucket = "bish_bash_bucket"  # Replace "your_bucket_name" with your desired bucket name
+  acl    = "private"            # Set ACL as per your requirement, e.g., "private", "public-read", etc.
+}
+
 resource "aws_iam_role_policy_attachment" "web_tier" {
   role       = aws_iam_role.bish_bash_bosh_app_ec2_role.name
   policy_arn = "arn:aws:iam::aws:policy/AWSElasticBeanstalkWebTier"
@@ -87,3 +92,4 @@ resource "aws_iam_instance_profile" "bish_bash_bosh_app_ec2_instance_profile" {
   name = "bish-bash-bosh-task-listing-app-ec2-instance-profile"
   role = aws_iam_role.bish_bash_bosh_app_ec2_role.name
 }
+

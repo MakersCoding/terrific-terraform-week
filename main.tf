@@ -67,11 +67,30 @@ resource "aws_iam_role" "bish_bash_bosh_app_ec2_role" {
 
   })
 }
+resource "aws_s3_bucket_policy" "docker_deploy_bucket_policy" {
+  bucket = aws_s3_bucket.docker_deploy_bucket.id
+
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Sid       = "PublicReadGetObject",
+        Effect    = "Allow",
+        Principal = "*",
+        Action    = "s3:PutObject",
+        Resource  = "arn:aws:s3:::bish-bash-bucket/*"
+      }
+    ]
+  })
+}
 resource "aws_s3_bucket" "docker_deploy_bucket" {
   bucket = "bish-bash-bucket"  # Replace "your_bucket_name" with your desired bucket name
   acl    = "private"            # Set ACL as per your requirement, e.g., "private", "public-read", etc.
 }
-
+data "aws_s3_bucket_object" "dockerrun" {
+  bucket = aws_s3_bucket.elasticbeanstalk_bucket.bucket
+  key    = "path/to/Dockerrun.aws.json"
+}
 resource "aws_iam_role_policy_attachment" "web_tier" {
   role       = aws_iam_role.bish_bash_bosh_app_ec2_role.name
   policy_arn = "arn:aws:iam::aws:policy/AWSElasticBeanstalkWebTier"

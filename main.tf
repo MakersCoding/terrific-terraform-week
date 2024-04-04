@@ -68,7 +68,7 @@ resource "aws_iam_role" "bish_bash_bosh_app_ec2_role" {
   })
 }
 resource "aws_s3_bucket" "docker_deploy_bucket" {
-  bucket = "bish_bash_bucket"  # Replace "your_bucket_name" with your desired bucket name
+  bucket = "bish-bash-bucket"  # Replace "your_bucket_name" with your desired bucket name
   acl    = "private"            # Set ACL as per your requirement, e.g., "private", "public-read", etc.
 }
 

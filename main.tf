@@ -79,6 +79,10 @@ resource "aws_iam_role_policy_attachment" "worker_tier" {
   role       = aws_iam_role.bish_bash_bosh_app_ec2_role.name
   policy_arn = "arn:aws:iam::aws:policy/AWSElasticBeanstalkWorkerTier"
 }
+resource "aws_iam_role_policy_attachment" "example_app_ec2_role_policy_attachment" {
+  role       = aws_iam_role.bish_bash_bosh_app_ec2_role.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
+}
 resource "aws_iam_instance_profile" "bish_bash_bosh_app_ec2_instance_profile" {
   name = "bish-bash-bosh-task-listing-app-ec2-instance-profile"
   role = aws_iam_role.bish_bash_bosh_app_ec2_role.name

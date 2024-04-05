@@ -3,7 +3,6 @@ terraform {
     bucket = "terrific-terraform-bucket"
     key    = "terraform.tfstate"
     region = "eu-west-2"
-
   }
 
   required_providers {
@@ -12,16 +11,18 @@ terraform {
       version = "~> 4.16"
     }
   }
+
   required_version = ">=1.2.0"
 }
+
 provider "aws" {
   region = "eu-west-2"
 }
 
 resource "aws_ecr_repository" "my_repository" {
-  name = "bish-bash-bosh-repo"
-  # Optional configurations
+  name                 = "bish-bash-bosh-repo"
   image_tag_mutability = "IMMUTABLE"
+
   image_scanning_configuration {
     scan_on_push = true
   }
@@ -30,6 +31,10 @@ resource "aws_ecr_repository" "my_repository" {
 resource "aws_elastic_beanstalk_application" "bish_bash_bosh_app" {
   name        = "bish-bash-bosh-task-listing-app"
   description = "Task listing app"
+}
+
+resource "aws_db_instance" "bish_bash_bosh_db" {
+  # ... database instance configuration ...
 }
 
 resource "aws_elastic_beanstalk_environment" "bish_bash_bosh_app_environment" {
@@ -48,6 +53,36 @@ resource "aws_elastic_beanstalk_environment" "bish_bash_bosh_app_environment" {
     name      = "EC2KeyName"
     value     = "bish-bash-bosh"
   }
+
+  setting {
+    namespace = "aws:elasticbeanstalk:application:environment"
+    name      = "RDS_HOSTNAME"
+    value     = aws_db_instance.bish_bash_bosh_db.endpoint
+  }
+
+  setting {
+    namespace = "aws:elasticbeanstalk:application:environment"
+    name      = "RDS_PORT"
+    value     = aws_db_instance.bish_bash_bosh_db.port
+  }
+
+  setting {
+    namespace = "aws:elasticbeanstalk:application:environment"
+    name      = "RDS_DB_NAME"
+    value     = aws_db_instance.bish_bash_bosh_db.name
+  }
+
+  setting {
+    namespace = "aws:elasticbeanstalk:application:environment"
+    name      = "RDS_USERNAME"
+    value     = aws_db_instance.bish_bash_bosh_db.username
+  }
+
+  setting {
+    namespace = "aws:elasticbeanstalk:application:environment"
+    name      = "RDS_PASSWORD"
+    value     = aws_db_instance.bish_bash_bosh_db.password
+  }
 }
 
 resource "aws_iam_role" "bish_bash_bosh_app_ec2_role" {
@@ -64,35 +99,35 @@ resource "aws_iam_role" "bish_bash_bosh_app_ec2_role" {
         Effect = "Allow"
       }
     ]
-
   })
 }
+
 resource "aws_s3_bucket" "docker_deploy_bucket" {
-  bucket = "bish-bash-bucket"  # Replace "your_bucket_name" with your desired bucket name
-  acl    = "private"            # Set ACL as per your requirement, e.g., "private", "public-read", etc.
+  bucket = "bish-bash-bucket"
+  acl    = "private"
 }
-# data "aws_s3_bucket_object" "dockerrun" {
-#   bucket = aws_s3_bucket.elasticbeanstalk_bucket.bucket
-#   key    = "path/to/Dockerrun.aws.json"
-# }
+
 resource "aws_iam_role_policy_attachment" "web_tier" {
   role       = aws_iam_role.bish_bash_bosh_app_ec2_role.name
   policy_arn = "arn:aws:iam::aws:policy/AWSElasticBeanstalkWebTier"
 }
+
 resource "aws_iam_role_policy_attachment" "multi_container_docker" {
   role       = aws_iam_role.bish_bash_bosh_app_ec2_role.name
   policy_arn = "arn:aws:iam::aws:policy/AWSElasticBeanstalkMulticontainerDocker"
 }
+
 resource "aws_iam_role_policy_attachment" "worker_tier" {
   role       = aws_iam_role.bish_bash_bosh_app_ec2_role.name
   policy_arn = "arn:aws:iam::aws:policy/AWSElasticBeanstalkWorkerTier"
 }
+
 resource "aws_iam_role_policy_attachment" "example_app_ec2_role_policy_attachment" {
   role       = aws_iam_role.bish_bash_bosh_app_ec2_role.name
   policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
 }
+
 resource "aws_iam_instance_profile" "bish_bash_bosh_app_ec2_instance_profile" {
   name = "bish-bash-bosh-task-listing-app-ec2-instance-profile"
   role = aws_iam_role.bish_bash_bosh_app_ec2_role.name
 }
-

@@ -33,13 +33,13 @@ resource "aws_elastic_beanstalk_application" "bish_bash_bosh_app" {
   description = "Task listing app"
 }
 
-resource "aws_db_instance" "bish_bash_bosh_db" {
+resource "aws_db_instance" "bishbashboshdb" {
   allocated_storage   = 10
   engine              = "postgres"
   engine_version      = "15.3"
   instance_class      = "db.t3.micro"
   identifier          = "bishbashboshdb"
-  name                = "bishdbname"
+  db_name             = "bishdbname"
   username            = "thebosh"
   password            = "bishbashbosh"
   skip_final_snapshot = true
@@ -78,7 +78,7 @@ resource "aws_elastic_beanstalk_environment" "bish_bash_bosh_app_environment" {
   setting {
     namespace = "aws:elasticbeanstalk:application:environment"
     name      = "RDS_DB_NAME"
-    value     = aws_db_instance.bishbashboshdb.name
+    value     = aws_db_instance.bishbashboshdb.db_name
   }
 
   setting {

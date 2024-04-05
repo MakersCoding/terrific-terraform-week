@@ -34,8 +34,16 @@ resource "aws_elastic_beanstalk_application" "bish_bash_bosh_app" {
 }
 
 resource "aws_db_instance" "bish_bash_bosh_db" {
-  instance_class = "db.t2.micro" # Added the instance_class argument
-  # ... other database instance configurations ...
+  allocated_storage   = 10
+  engine              = "postgres"
+  engine_version      = "15.3"
+  instance_class      = "db.t3.micro"
+  identifier          = "bishdbid"
+  name                = "bishdbname"
+  username            = "thebosh"
+  password            = "bishbashbosh"
+  skip_final_snapshot = true
+  publicly_accessible = true
 }
 
 resource "aws_elastic_beanstalk_environment" "bish_bash_bosh_app_environment" {
@@ -105,7 +113,7 @@ resource "aws_iam_role" "bish_bash_bosh_app_ec2_role" {
 
 resource "aws_s3_bucket" "docker_deploy_bucket" {
   bucket = "bish-bash-bucket"
-  acl    = "private" # Keeping the acl argument for now
+  acl    = "private"
 }
 
 resource "aws_iam_role_policy_attachment" "web_tier" {

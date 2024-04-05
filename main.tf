@@ -38,7 +38,7 @@ resource "aws_db_instance" "bish_bash_bosh_db" {
   engine              = "postgres"
   engine_version      = "15.3"
   instance_class      = "db.t3.micro"
-  identifier          = "bishdbid"
+  identifier          = "bishbashboshdb"
   name                = "bishdbname"
   username            = "thebosh"
   password            = "bishbashbosh"
@@ -66,31 +66,31 @@ resource "aws_elastic_beanstalk_environment" "bish_bash_bosh_app_environment" {
   setting {
     namespace = "aws:elasticbeanstalk:application:environment"
     name      = "RDS_HOSTNAME"
-    value     = aws_db_instance.bish_bash_bosh_db.endpoint
+    value     = aws_db_instance.bishbashboshdb.endpoint
   }
 
   setting {
     namespace = "aws:elasticbeanstalk:application:environment"
     name      = "RDS_PORT"
-    value     = aws_db_instance.bish_bash_bosh_db.port
+    value     = aws_db_instance.bishbashboshdb.port
   }
 
   setting {
     namespace = "aws:elasticbeanstalk:application:environment"
     name      = "RDS_DB_NAME"
-    value     = aws_db_instance.bish_bash_bosh_db.name
+    value     = aws_db_instance.bishbashboshdb.name
   }
 
   setting {
     namespace = "aws:elasticbeanstalk:application:environment"
     name      = "RDS_USERNAME"
-    value     = aws_db_instance.bish_bash_bosh_db.username
+    value     = aws_db_instance.bishbashboshdb.username
   }
 
   setting {
     namespace = "aws:elasticbeanstalk:application:environment"
     name      = "RDS_PASSWORD"
-    value     = aws_db_instance.bish_bash_bosh_db.password
+    value     = aws_db_instance.bishbashboshdb.password
   }
 }
 

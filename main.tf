@@ -34,7 +34,8 @@ resource "aws_elastic_beanstalk_application" "bish_bash_bosh_app" {
 }
 
 resource "aws_db_instance" "bish_bash_bosh_db" {
-  # ... database instance configuration ...
+  instance_class = "db.t2.micro" # Added the instance_class argument
+  # ... other database instance configurations ...
 }
 
 resource "aws_elastic_beanstalk_environment" "bish_bash_bosh_app_environment" {
@@ -104,7 +105,7 @@ resource "aws_iam_role" "bish_bash_bosh_app_ec2_role" {
 
 resource "aws_s3_bucket" "docker_deploy_bucket" {
   bucket = "bish-bash-bucket"
-  acl    = "private"
+  acl    = "private" # Keeping the acl argument for now
 }
 
 resource "aws_iam_role_policy_attachment" "web_tier" {
